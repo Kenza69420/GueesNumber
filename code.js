@@ -71,13 +71,13 @@ function showFeedback(message, type, percentDiff) {
         hintMessage = ' Hori!';
         feedback.className = 'feedback show hot';
     } else if (percentDiff <= 15) {
-        hintMessage = 'Prihoriva!';
+        hintMessage = ' Prihoriva!';
         feedback.className = 'feedback show warm';
     } else if (percentDiff <= 30) {
-        hintMessage = 'Chladno...';
+        hintMessage = ' Chladno...';
         feedback.className = 'feedback show cold';
     } else {
-        hintMessage = 'Námraza! Zkus to znovu!';
+        hintMessage = ' Námraza! Zkus to znovu!';
         feedback.className = 'feedback show ' + type;
     }
 
