@@ -1,0 +1,305 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #888888;
+    padding: 20px;
+}
+
+.container {
+    background: #cccccc;
+    padding: 40px;
+    max-width: 600px;
+    margin: 0 auto;
+    border: 2px solid #999999;
+}
+
+h1 {
+    text-align: center;
+    color: #444444;
+    margin-bottom: 30px;
+}
+
+.difficulty-selector {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: #aaaaaa;
+    border: 2px solid #777777;
+}
+
+.difficulty-selector h3 {
+    margin-bottom: 15px;
+    color: #333333;
+}
+
+.difficulty-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.difficulty-btn {
+    padding: 12px 20px;
+    border: 2px solid #666666;
+    background: #dddddd;
+    color: #333333;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.difficulty-btn:hover {
+    background: #999999;
+    color: #222222;
+}
+
+.difficulty-btn.active {
+    background: #777777;
+    color: #eeeeee;
+}
+
+.start-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.btn {
+    padding: 15px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid #666666;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: #999999;
+    color: #222222;
+}
+
+.btn-primary:hover {
+    background: #777777;
+    color: #eeeeee;
+}
+
+.btn-success {
+    background: #aaaaaa;
+    color: #333333;
+}
+
+.btn-success:hover {
+    background: #888888;
+    color: #eeeeee;
+}
+
+.game-form {
+    display: none;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333333;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    border: 2px solid #999999;
+    background: #dddddd;
+    color: #222222;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #666666;
+}
+
+.form-group input.error {
+    border-color: #555555;
+    background: #bbbbbb;
+}
+
+.error-message {
+    color: #444444;
+    font-size: 14px;
+    margin-top: 5px;
+    display: none;
+    background: #aaaaaa;
+    padding: 5px;
+    border: 1px solid #777777;
+}
+
+.error-message.show {
+    display: block;
+}
+
+.feedback {
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    display: none;
+}
+
+.feedback.show {
+    display: block;
+}
+
+.feedback.too-low {
+    background: #999999;
+    color: #222222;
+    border: 2px solid #777777;
+}
+
+.feedback.too-high {
+    background: #aaaaaa;
+    color: #333333;
+    border: 2px solid #888888;
+}
+
+.feedback.correct {
+    background: #888888;
+    color: #eeeeee;
+    border: 2px solid #555555;
+}
+
+.feedback.warm {
+    background: #9a9a9a;
+    color: #333333;
+    border: 2px solid #777777;
+}
+
+.feedback.hot {
+    background: #979797;
+    color: #222222;
+    border: 2px solid #666666;
+}
+
+.feedback.cold {
+    background: #b5b5b5;
+    color: #444444;
+    border: 2px solid #999999;
+}
+
+.game-info {
+    display: none;
+    background: #b0b0b0;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 2px solid #888888;
+}
+
+.game-info.show {
+    display: flex;
+    justify-content: space-between;
+}
+
+.info-item {
+    text-align: center;
+}
+
+.info-label {
+    font-size: 14px;
+    color: #555555;
+    margin-bottom: 5px;
+}
+
+.info-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333333;
+}
+
+.attempts-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.attempt-badge {
+    background: #888888;
+    color: #eeeeee;
+    padding: 5px 12px;
+    font-size: 14px;
+    border: 1px solid #666666;
+}
+
+.history {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #999999;
+}
+
+.history h2 {
+    color: #444444;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.history-item {
+    background: #bbbbbb;
+    padding: 20px;
+    border-left: 4px solid #777777;
+}
+
+.history-item:hover {
+    background: #aaaaaa;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333333;
+}
+
+.history-details {
+    font-size: 14px;
+    color: #555555;
+}
+
+.history-attempts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.clear-history-btn {
+    display: block;
+    margin: 20px auto 0;
+    padding: 10px 30px;
+    background: #999999;
+    color: #222222;
+    border: 2px solid #777777;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.clear-history-btn:hover {
+    background: #777777;
+    color: #eeeeee;
+}

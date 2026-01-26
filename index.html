@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess The Number - Hra</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Guess The Number</h1>
+
+        <div class="difficulty-selector" id="difficultySelector">
+            <h3>Vyber obtiznost:</h3>
+            <div class="difficulty-buttons">
+                <button class="difficulty-btn" data-range="10">Lehka (1-10)</button>
+                <button class="difficulty-btn active" data-range="100">Stredni (1-100)</button>
+                <button class="difficulty-btn" data-range="1000">Tezka (1-1000)</button>
+            </div>
+        </div>
+
+        <div class="start-container" id="startContainer">
+            <button class="btn btn-primary" id="startBtn">Zacit hru</button>
+        </div>
+
+        <div class="game-info" id="gameInfo">
+            <div class="info-item">
+                <div class="info-label">Rozsah</div>
+                <div class="info-value" id="rangeDisplay">1-100</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Pocet pokusu</div>
+                <div class="info-value" id="attemptsCount">0</div>
+            </div>
+        </div>
+
+        <form class="game-form" id="gameForm">
+            <div class="form-group">
+                <label for="guessInput">Zadej sve cislo:</label>
+                <input 
+                    type="text" 
+                    id="guessInput" 
+                    placeholder="Zadej cislo..."
+                    autocomplete="off"
+                >
+                <div class="error-message" id="errorMessage">Prosim, zadej platne cislo!</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Tipnout</button>
+        </form>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div id="attemptsContainer" class="hidden">
+            <div class="info-label">Tvoje pokusy:</div>
+            <div class="attempts-list" id="attemptsList"></div>
+        </div>
+
+        <div class="start-container hidden" id="tryAgainContainer">
+            <button class="btn btn-success" id="tryAgainBtn">Zkusit znovu</button>
+        </div>
+
+        <div class="history">
+            <h2>Historie her</h2>
+            <div class="history-list" id="historyList">
+                <p style="text-align: center; color: #999;">Zatim zadne dokoncene hry...</p>
+            </div>
+            <button class="clear-history-btn hidden" id="clearHistoryBtn">Vymazat historii</button>
+        </div>
+    </div>
+
+    <script src="code.js"></script>
+</body>
+</html>
