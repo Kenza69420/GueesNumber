@@ -1,5 +1,6 @@
 let secretNumber, attempts, attemptsList, maxRange = 100, gameActive = false;
 let lastGuess = null, lastWasTooLow = false, wrongDirectionCount = 0;
+let speedrunMode = false, startTime = null, timerInterval = null;
 
 const elements = {
     startContainer: document.getElementById('startContainer'),
@@ -15,7 +16,12 @@ const elements = {
     errorMessage: document.getElementById('errorMessage'),
     tryAgainContainer: document.getElementById('tryAgainContainer'),
     historyList: document.getElementById('historyList'),
-    clearHistoryBtn: document.getElementById('clearHistoryBtn')
+    clearHistoryBtn: document.getElementById('clearHistoryBtn'),
+    speedrunCheckbox: document.getElementById('speedrunMode'),
+    timerContainer: document.getElementById('timerContainer'),
+    timerDisplay: document.getElementById('timerDisplay'),
+    highscoreContainer: document.getElementById('highscoreContainer'),
+    highscoreDisplay: document.getElementById('highscoreDisplay')
 };
 
 function startGame() {
@@ -27,12 +33,26 @@ function startGame() {
     lastWasTooLow = false;
     wrongDirectionCount = 0;
 
+    speedrunMode = elements.speedrunCheckbox.checked;
+
     toggleVisibility([elements.startContainer, elements.difficultySelector], false);
     toggleVisibility([elements.gameForm, elements.gameInfo], true);
     elements.rangeDisplay.textContent = `1-${maxRange}`;
     elements.attemptsCount.textContent = '0';
     elements.attemptsContainer.classList.add('hidden');
     elements.feedback.classList.remove('show');
+
+    if (speedrunMode) {
+        elements.timerContainer.classList.remove('hidden');
+        elements.highscoreContainer.classList.remove('hidden');
+        loadHighscore();
+        startTime = Date.now();
+        timerInterval = setInterval(updateTimer, 10);
+    } else {
+        elements.timerContainer.classList.add('hidden');
+        elements.highscoreContainer.classList.add('hidden');
+    }
+
     elements.guessInput.focus();
 }
 
@@ -108,14 +128,67 @@ function showFeedback(message, className) {
     elements.feedback.textContent = message;
 }
 
+function updateTimer() {
+    if (!startTime) return;
+    let elapsed = (Date.now() - startTime) / 1000;
+    elements.timerDisplay.textContent = elapsed.toFixed(2) + 's';
+}
+
+function stopTimer() {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+    return startTime ? (Date.now() - startTime) / 1000 : 0;
+}
+
+function getHighscoreKey() {
+    return 'speedrunHighscore_' + maxRange;
+}
+
+function loadHighscore() {
+    let hs = localStorage.getItem(getHighscoreKey());
+    if (hs) {
+        elements.highscoreDisplay.textContent = parseFloat(hs).toFixed(2) + 's';
+    } else {
+        elements.highscoreDisplay.textContent = '-';
+    }
+}
+
+function saveHighscore(time) {
+    let key = getHighscoreKey();
+    let current = localStorage.getItem(key);
+    if (!current || time < parseFloat(current)) {
+        localStorage.setItem(key, time.toString());
+        return true;
+    }
+    return false;
+}
+
 function gameWon() {
     gameActive = false;
     const attemptText = attempts === 1 ? 'pokus' : (attempts <= 4 ? 'pokusy' : 'pokusů');
-    showFeedback(`Gratuluji! Uhodl jsi číslo ${secretNumber} na ${attempts} ${attemptText}!`, 'correct');
-    
+
+    let finalTime = 0;
+    let newRecord = false;
+
+    if (speedrunMode) {
+        finalTime = stopTimer();
+        newRecord = saveHighscore(finalTime);
+        loadHighscore();
+
+        if (newRecord) {
+            showFeedback(`Gratuluji! Číslo ${secretNumber} za ${finalTime.toFixed(2)}s - NOVÝ REKORD!`, 'correct');
+        } else {
+            showFeedback(`Gratuluji! Číslo ${secretNumber} za ${finalTime.toFixed(2)}s (${attempts} ${attemptText})`, 'correct');
+        }
+    } else {
+        showFeedback(`Gratuluji! Uhodl jsi číslo ${secretNumber} na ${attempts} ${attemptText}!`, 'correct');
+    }
+
     elements.gameForm.style.display = 'none';
     elements.tryAgainContainer.classList.remove('hidden');
-    saveToHistory();
+    saveToHistory(finalTime);
 }
 
 function updateAttempts() {
@@ -133,10 +206,13 @@ function showError(message = 'Prosím, zadej platné číslo!') {
 }
 
 function resetGame() {
+    stopTimer();
+    startTime = null;
     toggleVisibility([elements.tryAgainContainer, elements.attemptsContainer, elements.gameInfo], false);
     toggleVisibility([elements.difficultySelector, elements.startContainer], true);
     elements.feedback.classList.remove('show');
     elements.guessInput.value = '';
+    elements.timerDisplay.textContent = '0.00s';
 }
 
 function toggleVisibility(elementArray, show) {
@@ -150,15 +226,19 @@ function toggleVisibility(elementArray, show) {
     });
 }
 
-function saveToHistory() {
+function saveToHistory(time) {
     const history = getHistory();
-    history.unshift({
+    let entry = {
         date: new Date().toLocaleString('cs-CZ'),
         attempts,
         secretNumber,
         attemptsList: [...attemptsList],
         range: maxRange
-    });
+    };
+    if (speedrunMode && time) {
+        entry.speedrunTime = time;
+    }
+    history.unshift(entry);
 
     if (history.length > 10) history.pop();
     localStorage.setItem('guessGameHistory', JSON.stringify(history));
@@ -181,14 +261,15 @@ function loadHistory() {
 
     elements.clearHistoryBtn.classList.remove('hidden');
     elements.historyList.innerHTML = history.map((game, index) => `
-        <div class="history-item">
+        <div class="history-item ${game.speedrunTime ? 'speedrun' : ''}">
             <div class="history-header">
-                <span>Hra #${history.length - index}</span>
+                <span>Hra #${history.length - index}${game.speedrunTime ? ' ⏱️' : ''}</span>
                 <span>${game.date}</span>
             </div>
             <div class="history-details">
                 <p><strong>Tajné číslo:</strong> ${game.secretNumber} (1-${game.range})</p>
                 <p><strong>Počet pokusů:</strong> ${game.attempts}</p>
+                ${game.speedrunTime ? `<p><strong>Čas:</strong> ${game.speedrunTime.toFixed(2)}s</p>` : ''}
                 <p><strong>Tvoje tipy:</strong></p>
                 <div class="history-attempts">
                     ${game.attemptsList.map(num => `<span class="attempt-badge">${num}</span>`).join('')}

@@ -24,6 +24,12 @@
                 <button class="difficulty-btn active" data-range="100">Střední (1-100)</button>
                 <button class="difficulty-btn" data-range="1000">Těžká (1-1000)</button>
             </div>
+            <div class="speedrun-toggle">
+                <label>
+                    <input type="checkbox" id="speedrunMode">
+                    Speedrun režim
+                </label>
+            </div>
         </div>
 
         <div class="start-container" id="startContainer">
@@ -38,6 +44,14 @@
             <div class="info-item">
                 <div class="info-label">Počet pokusů</div>
                 <div class="info-value" id="attemptsCount">0</div>
+            </div>
+            <div class="info-item speedrun-info hidden" id="timerContainer">
+                <div class="info-label">Čas</div>
+                <div class="info-value" id="timerDisplay">0.00s</div>
+            </div>
+            <div class="info-item speedrun-info hidden" id="highscoreContainer">
+                <div class="info-label">Highscore</div>
+                <div class="info-value" id="highscoreDisplay">-</div>
             </div>
         </div>
 
