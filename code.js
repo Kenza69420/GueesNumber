@@ -55,6 +55,7 @@ function handleGuess(e) {
     elements.guessInput.value = '';
     elements.guessInput.classList.remove('error');
     elements.errorMessage.classList.remove('show');
+    elements.guessInput.focus();
 }
 
 function checkGuess(guess) {
@@ -63,7 +64,6 @@ function checkGuess(guess) {
         return;
     }
 
-    // Easter egg: sleduj, jestli hráč jde opačným směrem
     if (lastWasTooLow && lastGuess !== null && guess < lastGuess) {
         wrongDirectionCount++;
         if (wrongDirectionCount >= 3) {
