@@ -100,7 +100,7 @@ function gameWon() {
 function updateAttempts() {
     elements.attemptsCount.textContent = attempts;
     elements.attemptsContainer.classList.remove('hidden');
-    elements.attemptsList.innerHTML = attemptsList.map(num => 
+    elements.attemptsList.innerHTML = attemptsList.map(num =>
         `<span class="attempt-badge">${num}</span>`
     ).join('');
 }
