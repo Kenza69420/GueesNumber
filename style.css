@@ -12,7 +12,6 @@ body {
     transition: background 0.4s ease;
 }
 
-/* Theme Selector */
 .theme-selector {
     display: flex;
     justify-content: center;
@@ -59,7 +58,6 @@ body {
     background: #ff69b4;
 }
 
-/* Default Theme (šedá) */
 :root {
     --bg-color: #888888;
     --container-bg: #cccccc;
@@ -74,7 +72,6 @@ body {
     --btn-hover-color: #eeeeee;
 }
 
-/* Light Theme (bílá na černé) */
 body.theme-light {
     --bg-color: #ffffff;
     --container-bg: #f5f5f5;
@@ -89,7 +86,6 @@ body.theme-light {
     --btn-hover-color: #ffffff;
 }
 
-/* Dark Theme (černá na bílé) */
 body.theme-dark {
     --bg-color: #1a1a1a;
     --container-bg: #2d2d2d;
@@ -104,7 +100,6 @@ body.theme-dark {
     --btn-hover-color: #ffffff;
 }
 
-/* Hello Kitty Theme (růžová na bílé) */
 body.theme-hello-kitty {
     --bg-color: #ffb6c1;
     --container-bg: #fff0f5;
@@ -462,4 +457,47 @@ h1 {
 
 #attemptsContainer {
     margin-top: 20px;
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .difficulty-buttons {
+        flex-direction: column;
+    }
+
+    .difficulty-btn {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .btn {
+        padding: 12px 30px;
+        font-size: 16px;
+    }
+
+    .info-value {
+        font-size: 18px;
+    }
+
+    .feedback {
+        font-size: 16px;
+        padding: 15px;
+    }
+
+    .theme-option {
+        width: 30px;
+        height: 30px;
+    }
 }
