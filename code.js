@@ -1,8 +1,21 @@
-var secretNumber;
-var attempts;
-var attemptsList;
-var maxRange = 100;
-var gameActive = false;
+let secretNumber, attempts, attemptsList, maxRange = 100, gameActive = false;
+
+const elements = {
+    startContainer: document.getElementById('startContainer'),
+    difficultySelector: document.getElementById('difficultySelector'),
+    gameForm: document.getElementById('gameForm'),
+    gameInfo: document.getElementById('gameInfo'),
+    rangeDisplay: document.getElementById('rangeDisplay'),
+    attemptsCount: document.getElementById('attemptsCount'),
+    attemptsContainer: document.getElementById('attemptsContainer'),
+    attemptsList: document.getElementById('attemptsList'),
+    feedback: document.getElementById('feedback'),
+    guessInput: document.getElementById('guessInput'),
+    errorMessage: document.getElementById('errorMessage'),
+    tryAgainContainer: document.getElementById('tryAgainContainer'),
+    historyList: document.getElementById('historyList'),
+    clearHistoryBtn: document.getElementById('clearHistoryBtn')
+};
 
 function startGame() {
     secretNumber = Math.floor(Math.random() * maxRange) + 1;
@@ -10,227 +23,184 @@ function startGame() {
     attemptsList = [];
     gameActive = true;
 
-    document.getElementById('startContainer').classList.add('hidden');
-    document.getElementById('difficultySelector').classList.add('hidden');
-    document.getElementById('gameForm').style.display = 'block';
-    document.getElementById('gameInfo').classList.add('show');
-    document.getElementById('rangeDisplay').textContent = '1-' + maxRange;
-    document.getElementById('attemptsCount').textContent = '0';
-    document.getElementById('attemptsContainer').classList.add('hidden');
-    document.getElementById('feedback').classList.remove('show');
-    document.getElementById('guessInput').focus();
+    toggleVisibility([elements.startContainer, elements.difficultySelector], false);
+    toggleVisibility([elements.gameForm, elements.gameInfo], true);
+    elements.rangeDisplay.textContent = `1-${maxRange}`;
+    elements.attemptsCount.textContent = '0';
+    elements.attemptsContainer.classList.add('hidden');
+    elements.feedback.classList.remove('show');
+    elements.guessInput.focus();
 }
 
 function handleGuess(e) {
     e.preventDefault();
-
     if (!gameActive) return;
 
-    var guessInput = document.getElementById('guessInput');
-    var guess = parseInt(guessInput.value);
+    const guess = parseInt(elements.guessInput.value);
 
-    if (!guessInput.value || isNaN(guess)) {
-        showError();
-        return;
-    }
-
-    if (guess < 1 || guess > maxRange) {
-        showError('Zadej cislo mezi 1 a ' + maxRange + '!');
+    if (!elements.guessInput.value || isNaN(guess) || guess < 1 || guess > maxRange) {
+        showError(`Zadej číslo mezi 1 a ${maxRange}!`);
         return;
     }
 
     attempts++;
     attemptsList.push(guess);
     updateAttempts();
-
     checkGuess(guess);
 
-    guessInput.value = '';
-    guessInput.classList.remove('error');
-    document.getElementById('errorMessage').classList.remove('show');
+    elements.guessInput.value = '';
+    elements.guessInput.classList.remove('error');
+    elements.errorMessage.classList.remove('show');
 }
 
 function checkGuess(guess) {
-    var difference = Math.abs(guess - secretNumber);
-    var percentDiff = (difference / maxRange) * 100;
-
     if (guess === secretNumber) {
         gameWon();
-    } else if (guess < secretNumber) {
-        showFeedback('Moc nizko!', 'too-low', percentDiff);
-    } else {
-        showFeedback('Moc vysoko!', 'too-high', percentDiff);
+        return;
     }
+
+    const difference = Math.abs(guess - secretNumber);
+    const percentDiff = (difference / maxRange) * 100;
+    
+    let message = guess < secretNumber ? 'Moc nízko!' : 'Moc vysoko!';
+    let hint, className;
+
+    if (percentDiff <= 5) {
+        hint = ' Hoří!';
+        className = 'hot';
+    } else if (percentDiff <= 15) {
+        hint = ' Přihořívá!';
+        className = 'warm';
+    } else if (percentDiff <= 30) {
+        hint = ' Chladno...';
+        className = 'cold';
+    } else {
+        hint = ' Námraza! Zkus to znovu!';
+        className = guess < secretNumber ? 'too-low' : 'too-high';
+    }
+
+    showFeedback(message + hint, className);
 }
 
-function showFeedback(message, type, percentDiff) {
-    var hintMessage = '';
-    var feedback = document.getElementById('feedback');
-    
-    if (percentDiff <= 5) {
-        hintMessage = ' Hori!';
-        feedback.className = 'feedback show hot';
-    } else if (percentDiff <= 15) {
-        hintMessage = ' Prihoriva!';
-        feedback.className = 'feedback show warm';
-    } else if (percentDiff <= 30) {
-        hintMessage = ' Chladno...';
-        feedback.className = 'feedback show cold';
-    } else {
-        hintMessage = ' Námraza! Zkus to znovu!';
-        feedback.className = 'feedback show ' + type;
-    }
-
-    feedback.textContent = message + hintMessage;
-    feedback.classList.add('show');
+function showFeedback(message, className) {
+    elements.feedback.className = `feedback show ${className}`;
+    elements.feedback.textContent = message;
 }
 
 function gameWon() {
     gameActive = false;
-    var feedback = document.getElementById('feedback');
-    feedback.className = 'feedback show correct';
-    feedback.textContent = 'Gratuluji! Uhodl jsi cislo ' + secretNumber + ' na ' + attempts + ' ' + getAttemptText(attempts) + '!';
+    const attemptText = attempts === 1 ? 'pokus' : (attempts <= 4 ? 'pokusy' : 'pokusů');
+    showFeedback(`Gratuluji! Uhodl jsi číslo ${secretNumber} na ${attempts} ${attemptText}!`, 'correct');
     
-    document.getElementById('gameForm').style.display = 'none';
-    document.getElementById('tryAgainContainer').classList.remove('hidden');
-
+    elements.gameForm.style.display = 'none';
+    elements.tryAgainContainer.classList.remove('hidden');
     saveToHistory();
 }
 
-function getAttemptText(count) {
-    if (count === 1) return 'pokus';
-    if (count >= 2 && count <= 4) return 'pokusy';
-    return 'pokusu';
-}
-
 function updateAttempts() {
-    document.getElementById('attemptsCount').textContent = attempts;
-    document.getElementById('attemptsContainer').classList.remove('hidden');
-    
-    var list = document.getElementById('attemptsList');
-    list.innerHTML = '';
-    
-    for (var i = 0; i < attemptsList.length; i++) {
-        var badge = document.createElement('span');
-        badge.className = 'attempt-badge';
-        badge.textContent = attemptsList[i];
-        list.appendChild(badge);
-    }
+    elements.attemptsCount.textContent = attempts;
+    elements.attemptsContainer.classList.remove('hidden');
+    elements.attemptsList.innerHTML = attemptsList.map(num => 
+        `<span class="attempt-badge">${num}</span>`
+    ).join('');
 }
 
-function showError(message) {
-    if (!message) message = 'Prosim, zadej platne cislo!';
-    
-    var input = document.getElementById('guessInput');
-    var errorMsg = document.getElementById('errorMessage');
-    
-    input.classList.add('error');
-    errorMsg.textContent = message;
-    errorMsg.classList.add('show');
+function showError(message = 'Prosím, zadej platné číslo!') {
+    elements.guessInput.classList.add('error');
+    elements.errorMessage.textContent = message;
+    elements.errorMessage.classList.add('show');
 }
 
 function resetGame() {
-    document.getElementById('tryAgainContainer').classList.add('hidden');
-    document.getElementById('attemptsContainer').classList.add('hidden');
-    document.getElementById('feedback').classList.remove('show');
-    document.getElementById('gameInfo').classList.remove('show');
-    document.getElementById('difficultySelector').classList.remove('hidden');
-    document.getElementById('startContainer').classList.remove('hidden');
-    document.getElementById('guessInput').value = '';
+    toggleVisibility([elements.tryAgainContainer, elements.attemptsContainer, elements.gameInfo], false);
+    toggleVisibility([elements.difficultySelector, elements.startContainer], true);
+    elements.feedback.classList.remove('show');
+    elements.guessInput.value = '';
+}
+
+function toggleVisibility(elementArray, show) {
+    elementArray.forEach(el => {
+        if (show) {
+            el.classList.remove('hidden');
+            if (el === elements.gameForm) el.style.display = 'block';
+        } else {
+            el.classList.add('hidden');
+        }
+    });
 }
 
 function saveToHistory() {
-    var history = getHistory();
-    var gameData = {
+    const history = getHistory();
+    history.unshift({
         date: new Date().toLocaleString('cs-CZ'),
-        attempts: attempts,
-        secretNumber: secretNumber,
-        attemptsList: attemptsList.slice(),
+        attempts,
+        secretNumber,
+        attemptsList: [...attemptsList],
         range: maxRange
-    };
-    
-    history.unshift(gameData);
-    
-    if (history.length > 10) {
-        history.pop();
-    }
-    
+    });
+
+    if (history.length > 10) history.pop();
     localStorage.setItem('guessGameHistory', JSON.stringify(history));
     loadHistory();
 }
 
 function getHistory() {
-    var stored = localStorage.getItem('guessGameHistory');
-    if (stored) {
-        return JSON.parse(stored);
-    }
-    return [];
+    const stored = localStorage.getItem('guessGameHistory');
+    return stored ? JSON.parse(stored) : [];
 }
 
 function loadHistory() {
-    var history = getHistory();
-    var historyList = document.getElementById('historyList');
-    var clearBtn = document.getElementById('clearHistoryBtn');
+    const history = getHistory();
     
     if (history.length === 0) {
-        historyList.innerHTML = '<p style="text-align: center; color: #999;">Zatim zadne dokoncene hry...</p>';
-        clearBtn.classList.add('hidden');
+        elements.historyList.innerHTML = '<p class="empty-history">Zatím žádné dokončené hry...</p>';
+        elements.clearHistoryBtn.classList.add('hidden');
         return;
     }
 
-    clearBtn.classList.remove('hidden');
-    historyList.innerHTML = '';
-    
-    for (var i = 0; i < history.length; i++) {
-        var game = history[i];
-        var item = document.createElement('div');
-        item.className = 'history-item';
-        
-        var attemptsHtml = '';
-        for (var j = 0; j < game.attemptsList.length; j++) {
-            attemptsHtml += '<span class="attempt-badge">' + game.attemptsList[j] + '</span>';
-        }
-        
-        item.innerHTML = '<div class="history-header">' +
-            '<span>Hra #' + (history.length - i) + '</span>' +
-            '<span>' + game.date + '</span>' +
-            '</div>' +
-            '<div class="history-details">' +
-            '<p><strong>Tajne cislo:</strong> ' + game.secretNumber + ' (1-' + game.range + ')</p>' +
-            '<p><strong>Pocet pokusu:</strong> ' + game.attempts + '</p>' +
-            '<p><strong>Tvoje tipy:</strong></p>' +
-            '<div class="history-attempts">' + attemptsHtml + '</div>' +
-            '</div>';
-        
-        historyList.appendChild(item);
-    }
+    elements.clearHistoryBtn.classList.remove('hidden');
+    elements.historyList.innerHTML = history.map((game, index) => `
+        <div class="history-item">
+            <div class="history-header">
+                <span>Hra #${history.length - index}</span>
+                <span>${game.date}</span>
+            </div>
+            <div class="history-details">
+                <p><strong>Tajné číslo:</strong> ${game.secretNumber} (1-${game.range})</p>
+                <p><strong>Počet pokusů:</strong> ${game.attempts}</p>
+                <p><strong>Tvoje tipy:</strong></p>
+                <div class="history-attempts">
+                    ${game.attemptsList.map(num => `<span class="attempt-badge">${num}</span>`).join('')}
+                </div>
+            </div>
+        </div>
+    `).join('');
 }
 
 function clearHistory() {
-    if (confirm('Opravdu chces vymazat celou historii her?')) {
+    if (confirm('Opravdu chceš vymazat celou historii her?')) {
         localStorage.removeItem('guessGameHistory');
         loadHistory();
     }
 }
 
+function setDifficulty(button) {
+    document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
+    button.classList.add('active');
+    maxRange = parseInt(button.getAttribute('data-range'));
+}
+
 window.onload = function() {
     document.getElementById('startBtn').addEventListener('click', startGame);
     document.getElementById('tryAgainBtn').addEventListener('click', resetGame);
-    document.getElementById('gameForm').addEventListener('submit', handleGuess);
-    document.getElementById('clearHistoryBtn').addEventListener('click', clearHistory);
+    elements.gameForm.addEventListener('submit', handleGuess);
+    elements.clearHistoryBtn.addEventListener('click', clearHistory);
 
-    var difficultyBtns = document.querySelectorAll('.difficulty-btn');
-    for (var i = 0; i < difficultyBtns.length; i++) {
-        difficultyBtns[i].addEventListener('click', function() {
-            for (var j = 0; j < difficultyBtns.length; j++) {
-                difficultyBtns[j].classList.remove('active');
-            }
-            this.classList.add('active');
-            maxRange = parseInt(this.getAttribute('data-range'));
-        });
-    }
+    document.querySelectorAll('.difficulty-btn').forEach(btn => {
+        btn.addEventListener('click', function() { setDifficulty(this); });
+    });
 
-    document.getElementById('guessInput').addEventListener('input', function(e) {
+    elements.guessInput.addEventListener('input', (e) => {
         e.target.value = e.target.value.replace(/[^0-9]/g, '');
     });
 

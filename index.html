@@ -11,16 +11,16 @@
         <h1>Guess The Number</h1>
 
         <div class="difficulty-selector" id="difficultySelector">
-            <h3>Vyber obtiznost:</h3>
+            <h3>Vyber obtížnost:</h3>
             <div class="difficulty-buttons">
-                <button class="difficulty-btn" data-range="10">Lehka (1-10)</button>
-                <button class="difficulty-btn active" data-range="100">Stredni (1-100)</button>
-                <button class="difficulty-btn" data-range="1000">Tezka (1-1000)</button>
+                <button class="difficulty-btn" data-range="10">Lehká (1-10)</button>
+                <button class="difficulty-btn active" data-range="100">Střední (1-100)</button>
+                <button class="difficulty-btn" data-range="1000">Těžká (1-1000)</button>
             </div>
         </div>
 
         <div class="start-container" id="startContainer">
-            <button class="btn btn-primary" id="startBtn">Zacit hru</button>
+            <button class="btn btn-primary" id="startBtn">Začít hru</button>
         </div>
 
         <div class="game-info" id="gameInfo">
@@ -29,21 +29,21 @@
                 <div class="info-value" id="rangeDisplay">1-100</div>
             </div>
             <div class="info-item">
-                <div class="info-label">Pocet pokusu</div>
+                <div class="info-label">Počet pokusů</div>
                 <div class="info-value" id="attemptsCount">0</div>
             </div>
         </div>
 
         <form class="game-form" id="gameForm">
             <div class="form-group">
-                <label for="guessInput">Zadej sve cislo:</label>
+                <label for="guessInput">Zadej své číslo:</label>
                 <input 
                     type="text" 
                     id="guessInput" 
-                    placeholder="Zadej cislo..."
+                    placeholder="Zadej číslo..."
                     autocomplete="off"
                 >
-                <div class="error-message" id="errorMessage">Prosim, zadej platne cislo!</div>
+                <div class="error-message" id="errorMessage">Prosím, zadej platné číslo!</div>
             </div>
             <button type="submit" class="btn btn-primary">Tipnout</button>
         </form>
@@ -62,7 +62,7 @@
         <div class="history">
             <h2>Historie her</h2>
             <div class="history-list" id="historyList">
-                <p style="text-align: center; color: #999;">Zatim zadne dokoncene hry...</p>
+                <p class="empty-history">Zatím žádné dokončené hry...</p>
             </div>
             <button class="clear-history-btn hidden" id="clearHistoryBtn">Vymazat historii</button>
         </div>

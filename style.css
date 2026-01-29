@@ -277,6 +277,10 @@ h1 {
     color: #555555;
 }
 
+.history-details p {
+    margin-bottom: 8px;
+}
+
 .history-attempts {
     display: flex;
     flex-wrap: wrap;
@@ -302,4 +306,13 @@ h1 {
 .clear-history-btn:hover {
     background: #777777;
     color: #eeeeee;
+}
+
+.empty-history {
+    text-align: center;
+    color: #999;
+}
+
+#attemptsContainer {
+    margin-top: 20px;
 }
