@@ -1,4 +1,5 @@
 let secretNumber, attempts, attemptsList, maxRange = 100, gameActive = false;
+let lastGuess = null, lastWasTooLow = false, wrongDirectionCount = 0;
 
 const elements = {
     startContainer: document.getElementById('startContainer'),
@@ -22,6 +23,9 @@ function startGame() {
     attempts = 0;
     attemptsList = [];
     gameActive = true;
+    lastGuess = null;
+    lastWasTooLow = false;
+    wrongDirectionCount = 0;
 
     toggleVisibility([elements.startContainer, elements.difficultySelector], false);
     toggleVisibility([elements.gameForm, elements.gameInfo], true);
@@ -59,9 +63,23 @@ function checkGuess(guess) {
         return;
     }
 
+    // Easter egg: sleduj, jestli hráč jde opačným směrem
+    if (lastWasTooLow && lastGuess !== null && guess < lastGuess) {
+        wrongDirectionCount++;
+        if (wrongDirectionCount >= 3) {
+            showFeedback("Zlatíčko, když text píše moc nízko tak nepujdu ještě níž ne? Takhle přijímačky na vysokou školu neuděláš!", 'easter-egg');
+            wrongDirectionCount = 0;
+            lastGuess = guess;
+            lastWasTooLow = guess < secretNumber;
+            return;
+        }
+    } else {
+        wrongDirectionCount = 0;
+    }
+
     const difference = Math.abs(guess - secretNumber);
     const percentDiff = (difference / maxRange) * 100;
-    
+
     let message = guess < secretNumber ? 'Moc nízko!' : 'Moc vysoko!';
     let hint, className;
 
@@ -78,6 +96,9 @@ function checkGuess(guess) {
         hint = ' Námraza! Zkus to znovu!';
         className = guess < secretNumber ? 'too-low' : 'too-high';
     }
+
+    lastGuess = guess;
+    lastWasTooLow = guess < secretNumber;
 
     showFeedback(message + hint, className);
 }
