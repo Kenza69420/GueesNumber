@@ -211,6 +211,27 @@ function setDifficulty(button) {
     maxRange = parseInt(button.getAttribute('data-range'));
 }
 
+function setTheme(theme) {
+    document.body.className = '';
+    if (theme !== 'default') {
+        document.body.classList.add('theme-' + theme);
+    }
+
+    document.querySelectorAll('.theme-option').forEach(opt => {
+        opt.classList.remove('active');
+        if (opt.getAttribute('data-theme') === theme) {
+            opt.classList.add('active');
+        }
+    });
+
+    localStorage.setItem('guessGameTheme', theme);
+}
+
+function loadTheme() {
+    const savedTheme = localStorage.getItem('guessGameTheme') || 'default';
+    setTheme(savedTheme);
+}
+
 window.onload = function() {
     document.getElementById('startBtn').addEventListener('click', startGame);
     document.getElementById('tryAgainBtn').addEventListener('click', resetGame);
@@ -221,9 +242,16 @@ window.onload = function() {
         btn.addEventListener('click', function() { setDifficulty(this); });
     });
 
+    document.querySelectorAll('.theme-option').forEach(opt => {
+        opt.addEventListener('click', function() {
+            setTheme(this.getAttribute('data-theme'));
+        });
+    });
+
     elements.guessInput.addEventListener('input', (e) => {
         e.target.value = e.target.value.replace(/[^0-9]/g, '');
     });
 
+    loadTheme();
     loadHistory();
 };

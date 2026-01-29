@@ -6,34 +6,146 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: #888888;
+    background: var(--bg-color, #888888);
     padding: 20px;
+    transition: background 0.3s ease;
+}
+
+/* Theme Selector */
+.theme-selector {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.theme-option {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.theme-option:hover {
+    border-color: red;
+    transform: scale(1.1);
+}
+
+.theme-option.active {
+    border-color: #333;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.theme-option.default {
+    background: #888888;
+}
+
+.theme-option.light {
+    background: #ffffff;
+    border: 3px solid #ccc;
+}
+
+.theme-option.light:hover {
+    border-color: red;
+}
+
+.theme-option.dark {
+    background: #222222;
+}
+
+.theme-option.hello-kitty {
+    background: #ff69b4;
+}
+
+/* Default Theme (šedá) */
+:root {
+    --bg-color: #888888;
+    --container-bg: #cccccc;
+    --container-border: #999999;
+    --text-color: #333333;
+    --heading-color: #444444;
+    --input-bg: #dddddd;
+    --input-border: #999999;
+    --btn-bg: #999999;
+    --btn-color: #222222;
+    --btn-hover-bg: #777777;
+    --btn-hover-color: #eeeeee;
+}
+
+/* Light Theme (bílá na černé) */
+body.theme-light {
+    --bg-color: #ffffff;
+    --container-bg: #f5f5f5;
+    --container-border: #333333;
+    --text-color: #000000;
+    --heading-color: #000000;
+    --input-bg: #ffffff;
+    --input-border: #333333;
+    --btn-bg: #333333;
+    --btn-color: #ffffff;
+    --btn-hover-bg: #000000;
+    --btn-hover-color: #ffffff;
+}
+
+/* Dark Theme (černá na bílé) */
+body.theme-dark {
+    --bg-color: #1a1a1a;
+    --container-bg: #2d2d2d;
+    --container-border: #444444;
+    --text-color: #ffffff;
+    --heading-color: #ffffff;
+    --input-bg: #3d3d3d;
+    --input-border: #555555;
+    --btn-bg: #555555;
+    --btn-color: #ffffff;
+    --btn-hover-bg: #777777;
+    --btn-hover-color: #ffffff;
+}
+
+/* Hello Kitty Theme (růžová na bílé) */
+body.theme-hello-kitty {
+    --bg-color: #ffb6c1;
+    --container-bg: #fff0f5;
+    --container-border: #ff69b4;
+    --text-color: #ff1493;
+    --heading-color: #ff69b4;
+    --input-bg: #ffffff;
+    --input-border: #ff69b4;
+    --btn-bg: #ff69b4;
+    --btn-color: #ffffff;
+    --btn-hover-bg: #ff1493;
+    --btn-hover-color: #ffffff;
 }
 
 .container {
-    background: #cccccc;
+    background: var(--container-bg);
     padding: 40px;
     max-width: 600px;
     margin: 0 auto;
-    border: 2px solid #999999;
+    border: 2px solid var(--container-border);
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 h1 {
     text-align: center;
-    color: #444444;
+    color: var(--heading-color);
     margin-bottom: 30px;
+    transition: color 0.3s ease;
 }
 
 .difficulty-selector {
     margin-bottom: 25px;
     padding: 20px;
-    background: #aaaaaa;
-    border: 2px solid #777777;
+    background: rgba(0,0,0,0.1);
+    border: 2px solid var(--container-border);
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .difficulty-selector h3 {
     margin-bottom: 15px;
-    color: #333333;
+    color: var(--text-color);
+    transition: color 0.3s ease;
 }
 
 .difficulty-buttons {
@@ -43,22 +155,23 @@ h1 {
 
 .difficulty-btn {
     padding: 12px 20px;
-    border: 2px solid #666666;
-    background: #dddddd;
-    color: #333333;
+    border: 2px solid var(--container-border);
+    background: var(--input-bg);
+    color: var(--text-color);
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
+    transition: all 0.3s ease;
 }
 
 .difficulty-btn:hover {
-    background: #999999;
-    color: #222222;
+    background: var(--btn-hover-bg);
+    color: var(--btn-hover-color);
 }
 
 .difficulty-btn.active {
-    background: #777777;
-    color: #eeeeee;
+    background: var(--btn-bg);
+    color: var(--btn-color);
 }
 
 .start-container {
@@ -70,28 +183,29 @@ h1 {
     padding: 15px 40px;
     font-size: 18px;
     font-weight: bold;
-    border: 2px solid #666666;
+    border: 2px solid var(--container-border);
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .btn-primary {
-    background: #999999;
-    color: #222222;
+    background: var(--btn-bg);
+    color: var(--btn-color);
 }
 
 .btn-primary:hover {
-    background: #777777;
-    color: #eeeeee;
+    background: var(--btn-hover-bg);
+    color: var(--btn-hover-color);
 }
 
 .btn-success {
-    background: #aaaaaa;
-    color: #333333;
+    background: var(--btn-bg);
+    color: var(--btn-color);
 }
 
 .btn-success:hover {
-    background: #888888;
-    color: #eeeeee;
+    background: var(--btn-hover-bg);
+    color: var(--btn-hover-color);
 }
 
 .game-form {
@@ -106,37 +220,39 @@ h1 {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #333333;
+    color: var(--text-color);
     font-weight: bold;
+    transition: color 0.3s ease;
 }
 
 .form-group input {
     width: 100%;
     padding: 15px;
     font-size: 18px;
-    border: 2px solid #999999;
-    background: #dddddd;
-    color: #222222;
+    border: 2px solid var(--input-border);
+    background: var(--input-bg);
+    color: var(--text-color);
+    transition: all 0.3s ease;
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: #666666;
+    border-color: var(--heading-color);
 }
 
 .form-group input.error {
-    border-color: #555555;
-    background: #bbbbbb;
+    border-color: #cc0000;
+    background: rgba(255,0,0,0.1);
 }
 
 .error-message {
-    color: #444444;
+    color: #cc0000;
     font-size: 14px;
     margin-top: 5px;
     display: none;
-    background: #aaaaaa;
+    background: rgba(255,0,0,0.1);
     padding: 5px;
-    border: 1px solid #777777;
+    border: 1px solid #cc0000;
 }
 
 .error-message.show {
@@ -208,10 +324,11 @@ h1 {
 
 .game-info {
     display: none;
-    background: #b0b0b0;
+    background: rgba(0,0,0,0.1);
     padding: 15px;
     margin-bottom: 20px;
-    border: 2px solid #888888;
+    border: 2px solid var(--container-border);
+    transition: all 0.3s ease;
 }
 
 .game-info.show {
@@ -225,14 +342,16 @@ h1 {
 
 .info-label {
     font-size: 14px;
-    color: #555555;
+    color: var(--text-color);
     margin-bottom: 5px;
+    transition: color 0.3s ease;
 }
 
 .info-value {
     font-size: 24px;
     font-weight: bold;
-    color: #333333;
+    color: var(--heading-color);
+    transition: color 0.3s ease;
 }
 
 #attemptsContainer {
@@ -247,23 +366,26 @@ h1 {
 }
 
 .attempt-badge {
-    background: #888888;
-    color: #eeeeee;
+    background: var(--btn-bg);
+    color: var(--btn-color);
     padding: 5px 12px;
     font-size: 14px;
-    border: 1px solid #666666;
+    border: 1px solid var(--container-border);
+    transition: all 0.3s ease;
 }
 
 .history {
     margin-top: 40px;
     padding-top: 30px;
-    border-top: 2px solid #999999;
+    border-top: 2px solid var(--container-border);
+    transition: border-color 0.3s ease;
 }
 
 .history h2 {
-    color: #444444;
+    color: var(--heading-color);
     margin-bottom: 20px;
     text-align: center;
+    transition: color 0.3s ease;
 }
 
 .history-list {
@@ -273,13 +395,14 @@ h1 {
 }
 
 .history-item {
-    background: #bbbbbb;
+    background: rgba(0,0,0,0.1);
     padding: 20px;
-    border-left: 4px solid #777777;
+    border-left: 4px solid var(--heading-color);
+    transition: all 0.3s ease;
 }
 
 .history-item:hover {
-    background: #aaaaaa;
+    background: rgba(0,0,0,0.15);
 }
 
 .history-header {
@@ -287,12 +410,14 @@ h1 {
     justify-content: space-between;
     margin-bottom: 10px;
     font-weight: bold;
-    color: #333333;
+    color: var(--text-color);
+    transition: color 0.3s ease;
 }
 
 .history-details {
     font-size: 14px;
-    color: #555555;
+    color: var(--text-color);
+    transition: color 0.3s ease;
 }
 
 .history-details p {
@@ -314,21 +439,24 @@ h1 {
     display: block;
     margin: 20px auto 0;
     padding: 10px 30px;
-    background: #999999;
-    color: #222222;
-    border: 2px solid #777777;
+    background: var(--btn-bg);
+    color: var(--btn-color);
+    border: 2px solid var(--container-border);
     cursor: pointer;
     font-weight: bold;
+    transition: all 0.3s ease;
 }
 
 .clear-history-btn:hover {
-    background: #777777;
-    color: #eeeeee;
+    background: var(--btn-hover-bg);
+    color: var(--btn-hover-color);
 }
 
 .empty-history {
     text-align: center;
-    color: #999;
+    color: var(--text-color);
+    opacity: 0.7;
+    transition: color 0.3s ease;
 }
 
 #attemptsContainer {
