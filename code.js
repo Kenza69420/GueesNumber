@@ -174,6 +174,28 @@ function saveHighscore(time) {
     return false;
 }
 
+function spawnConfetti() {
+    let container = document.createElement('div');
+    container.className = 'confetti-container';
+    document.body.appendChild(container);
+
+    let colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ff6600', '#ff69b4'];
+
+    for (let i = 0; i < 100; i++) {
+        let confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        confetti.style.animationDelay = Math.random() * 0.5 + 's';
+        container.appendChild(confetti);
+    }
+
+    setTimeout(() => {
+        container.remove();
+    }, 5000);
+}
+
 function gameWon() {
     gameActive = false;
     const attemptText = attempts === 1 ? 'pokus' : (attempts <= 4 ? 'pokusy' : 'pokusů');
@@ -194,6 +216,8 @@ function gameWon() {
     } else {
         showFeedback(`Gratuluji! Uhodl jsi číslo ${secretNumber} na ${attempts} ${attemptText}!`, 'correct');
     }
+
+    spawnConfetti();
 
     elements.gameForm.style.display = 'none';
     elements.tryAgainContainer.classList.remove('hidden');
