@@ -192,11 +192,36 @@ h1 {
 }
 
 .speedrun-info .info-value {
-    color: #ff6600;
+    color: var(--heading-color);
+}
+
+.speedrun-highscore {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--container-border);
+    color: var(--text-color);
+    font-weight: bold;
+    text-align: center;
+}
+
+.speedrun-highscore span {
+    font-size: 18px;
+    color: var(--heading-color);
+}
+
+.new-record {
+    animation: pulse 0.5s ease-in-out 2;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); color: #00ff00; }
+    100% { transform: scale(1); }
 }
 
 .history-item.speedrun {
-    border-left-color: #ff6600;
+    border-left-color: var(--heading-color);
 }
 
 .start-container {

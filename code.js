@@ -21,7 +21,9 @@ const elements = {
     timerContainer: document.getElementById('timerContainer'),
     timerDisplay: document.getElementById('timerDisplay'),
     highscoreContainer: document.getElementById('highscoreContainer'),
-    highscoreDisplay: document.getElementById('highscoreDisplay')
+    highscoreDisplay: document.getElementById('highscoreDisplay'),
+    speedrunHighscore: document.getElementById('speedrunHighscore'),
+    menuHighscore: document.getElementById('menuHighscore')
 };
 
 function startGame() {
@@ -146,12 +148,19 @@ function getHighscoreKey() {
     return 'speedrunHighscore_' + maxRange;
 }
 
-function loadHighscore() {
+function loadHighscore(animate) {
     let hs = localStorage.getItem(getHighscoreKey());
-    if (hs) {
-        elements.highscoreDisplay.textContent = parseFloat(hs).toFixed(2) + 's';
-    } else {
-        elements.highscoreDisplay.textContent = '-';
+    let text = hs ? parseFloat(hs).toFixed(2) + 's' : '-';
+    elements.highscoreDisplay.textContent = text;
+    elements.menuHighscore.textContent = text;
+
+    if (animate && hs) {
+        elements.highscoreDisplay.classList.add('new-record');
+        elements.menuHighscore.classList.add('new-record');
+        setTimeout(() => {
+            elements.highscoreDisplay.classList.remove('new-record');
+            elements.menuHighscore.classList.remove('new-record');
+        }, 1000);
     }
 }
 
@@ -175,7 +184,7 @@ function gameWon() {
     if (speedrunMode) {
         finalTime = stopTimer();
         newRecord = saveHighscore(finalTime);
-        loadHighscore();
+        loadHighscore(newRecord);
 
         if (newRecord) {
             showFeedback(`Gratuluji! Číslo ${secretNumber} za ${finalTime.toFixed(2)}s - NOVÝ REKORD!`, 'correct');
@@ -290,6 +299,16 @@ function setDifficulty(button) {
     document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
     button.classList.add('active');
     maxRange = parseInt(button.getAttribute('data-range'));
+    updateMenuHighscore();
+}
+
+function updateMenuHighscore() {
+    if (elements.speedrunCheckbox.checked) {
+        elements.speedrunHighscore.classList.remove('hidden');
+        loadHighscore(false);
+    } else {
+        elements.speedrunHighscore.classList.add('hidden');
+    }
 }
 
 function setTheme(theme) {
@@ -332,6 +351,8 @@ window.onload = function() {
     elements.guessInput.addEventListener('input', (e) => {
         e.target.value = e.target.value.replace(/[^0-9]/g, '');
     });
+
+    elements.speedrunCheckbox.addEventListener('change', updateMenuHighscore);
 
     loadTheme();
     loadHistory();
