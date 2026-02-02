@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess The Number - Hra</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="theme-selector">
+        <div class="theme-option default active" data-theme="default" title="default mode"></div>
+        <div class="theme-option light" data-theme="light" title="light mode"></div>
+        <div class="theme-option dark" data-theme="dark" title="dark mode"></div>
+        <div class="theme-option hello-kitty" data-theme="hello-kitty" title="hello kitty mode"></div>
+    </div>
+
+    <div class="container">
+        <h1>Guess The Number</h1>
+
+        <div class="difficulty-selector" id="difficultySelector">
+            <h3>Vyber obtížnost:</h3>
+            <div class="difficulty-buttons">
+                <button class="difficulty-btn" data-range="10">Lehká (1-10)</button>
+                <button class="difficulty-btn active" data-range="100">Střední (1-100)</button>
+                <button class="difficulty-btn" data-range="1000">Těžká (1-1000)</button>
+            </div>
+            <div class="speedrun-toggle">
+                <label>
+                    <input type="checkbox" id="speedrunMode">
+                    Speedrun režim
+                </label>
+                <div class="speedrun-highscore hidden" id="speedrunHighscore">
+                    Rekord: <span id="menuHighscore">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="start-container" id="startContainer">
+            <button class="btn btn-primary" id="startBtn">Začít hru</button>
+        </div>
+
+        <div class="game-info" id="gameInfo">
+            <div class="info-item">
+                <div class="info-label">Rozsah</div>
+                <div class="info-value" id="rangeDisplay">1-100</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Počet pokusů</div>
+                <div class="info-value" id="attemptsCount">0</div>
+            </div>
+            <div class="info-item speedrun-info hidden" id="timerContainer">
+                <div class="info-label">Čas</div>
+                <div class="info-value" id="timerDisplay">0.00s</div>
+            </div>
+            <div class="info-item speedrun-info hidden" id="highscoreContainer">
+                <div class="info-label">Highscore</div>
+                <div class="info-value" id="highscoreDisplay">-</div>
+            </div>
+        </div>
+
+        <form class="game-form" id="gameForm">
+            <div class="form-group">
+                <label for="guessInput">Zadej své číslo:</label>
+                <input 
+                    type="text" 
+                    id="guessInput" 
+                    placeholder="Zadej číslo..."
+                    autocomplete="off"
+                >
+                <div class="error-message" id="errorMessage">Prosím, zadej platné číslo!</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Tipnout</button>
+        </form>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div id="attemptsContainer" class="hidden">
+            <div class="info-label">Tvoje pokusy:</div>
+            <div class="attempts-list" id="attemptsList"></div>
+        </div>
+
+        <div class="start-container hidden" id="tryAgainContainer">
+            <button class="btn btn-success" id="tryAgainBtn">Zkusit znovu</button>
+        </div>
+
+        <div class="history">
+            <h2>Historie her</h2>
+            <div class="history-list" id="historyList">
+                <p class="empty-history">Zatím žádné dokončené hry...</p>
+            </div>
+            <button class="clear-history-btn hidden" id="clearHistoryBtn">Vymazat historii</button>
+        </div>
+    </div>
+
+    <script src="code.js"></script>
+</body>
+</html>
